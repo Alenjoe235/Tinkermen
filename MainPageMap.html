@@ -50,7 +50,14 @@
 
         .tab:last-child {
             margin-right: 0;
-        }.image-container {
+        }
+
+        /* Green background for the "Map" button */
+        .map-tab {
+            background-color: green;
+        }
+
+        .image-container {
             width: 25%; /* Adjust this value as needed */
             /* You can also add other styles like margin, padding, etc. */
         }
@@ -81,10 +88,10 @@
         </div>
     </div>
     <div class="tabs">
-        <button class="tab"><a href="MainPageMap.html" style="text-decoration: none; color: inherit;">Maps</a></button>
+        <button class="tab map-tab">Maps</button>
         <button class="tab"><a href="MainPagePost.html" style="text-decoration: none; color: inherit;">Posts</a></button>
         <button class="tab"><a href="MainPageBuy.html" style="text-decoration: none; color: inherit;">Buy</a></button>
-        <button class="tab">Sell</button>
+        <button class="tab"><a href="MainPageSell.html" style="text-decoration: none; color: inherit;">Sell</a></button>
     </div>
     <h1>Nearest Location Finder</h1>
     <p>Click the button below to get your current location and find the nearest predefined location:</p>
