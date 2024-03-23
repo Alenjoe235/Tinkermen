@@ -125,9 +125,56 @@
         }
 
         function addToCart(productName) {
-            // You can implement the functionality to add the product to the cart here
-            alert("'" + productName + "' added to cart!");
+    // Fetch the original database
+    fetch('https://sheetdb.io/api/v1/g3u7hl1xrw1yi')
+    .then(response => response.json())
+    .then(data => {
+        // Find the product in the database
+        const product = data.find(item => item.productname === productName);
+        
+        // Decrease the amountkg_l by 1
+        product.amountkg_l -= 1;
+
+        // If amountkg_l becomes 0, delete the row
+        if (product.amountkg_l === 0) {
+            // Delete the row from the original database
+            fetch(`https://sheetdb.io/api/v1/g3u7hl1xrw1yi/productname/${encodeURIComponent(productName)}`, {
+                method: 'DELETE'
+            })
+            .then(() => console.log('Row deleted successfully'))
+            .catch(error => console.error('Error deleting row:', error));
+        } else {
+            // Update the row in the original database
+            fetch(`https://sheetdb.io/api/v1/g3u7hl1xrw1yi/productname/${encodeURIComponent(productName)}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(product)
+            })
+            .then(() => console.log('Row updated successfully'))
+            .catch(error => console.error('Error updating row:', error));
         }
+
+        // Create a new row in the second database
+        const newRow = {
+            productname: product.productname,
+            price: product.priceperkg_l
+        };
+
+        fetch('https://sheetdb.io/api/v1/oai5oe4wxwkji', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRow)
+        })
+        .then(() => console.log('New row created in second database'))
+        .catch(error => console.error('Error creating new row:', error));
+    })
+    .catch(error => console.error('Error fetching data:', error));
+}
+
 
         // Function to calculate similarity score between two strings
         function similarityScore(str1, str2) {
