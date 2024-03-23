@@ -6,32 +6,51 @@
     <title>About - FarmConnect</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #f9f9f9;
         }
         .container {
             max-width: 800px;
             margin: 50px auto;
             padding: 0 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding-bottom: 30px;
         }
         .about-heading {
-            margin-top: 0;
-            text-align: left; /* Align "About" heading to the left */
+            margin-top: 20px;
+            text-align: center;
+            color: #333;
+            font-size: 36px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
         }
         .farmconnect-heading {
-            text-align: center; /* Center align "FarmConnect" heading */
+            text-align: center;
+            color: #4CAF50;
+            font-size: 28px;
+            margin-top: -10px;
         }
         .text-right {
-            text-align: right;
+            text-align: center;
+            color: #777;
+            margin-top: -15px;
         }
         .back-button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             background-color: #4CAF50;
-            color: white;
+            color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+            display: block;
+            margin: 0 auto;
+            font-size: 16px;
         }
         .back-button:hover {
             background-color: #45a049;
@@ -41,7 +60,7 @@
 <body>
     <div class="container">
         <h1 class="about-heading">About</h1>
-        <h2 class="farmconnect-heading">FarmConnect</h2> <!-- Center align "FarmConnect" heading -->
+        <h2 class="farmconnect-heading">FarmConnect</h2>
         <p class="text-right">Developed by Aadith Tom, Alen Joe Benny, Deon Jose, and Johan Antony Davis</p>
         <p>FarmConnect is a digital platform designed to foster a direct connection between local farmers and consumers, with a focus on reducing food waste, promoting sustainable agriculture practices, and supporting local communities. The platform serves as a marketplace where consumers can discover and purchase fresh, locally sourced produce directly from farmers, while farmers can efficiently sell their products and reduce waste by selling surplus or imperfect produce.</p>
         <button onclick="goBack()" class="back-button">Back</button>

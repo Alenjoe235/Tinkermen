@@ -9,46 +9,49 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #f2f2f2; /* Set background color */
         }
         .container {
             max-width: 800px;
             margin: 50px auto;
-            padding: 0 20px;
-            position: relative; /* Add position relative to enable absolute positioning */
+            padding: 20px;
+            position: relative;
+            background-color: #fff; /* Container background color */
+            border-radius: 10px; /* Add rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow */
         }
         .heading {
             margin-top: 0;
+            color: #333; /* Heading color */
         }
         .subscription-info {
-            font-size: medium;
-            text-align: left;
+            font-size: 18px;
+            text-align: center;
             font-style: italic;
+            color: #666; /* Subscription info color */
         }
         .plan {
             text-align: center;
+            color: #007bff; /* Plan color */
+            margin-top: 20px;
         }
-        .claim-button {
-            padding: 10px 20px;
+        .claim-button, .back-button {
+            padding: 12px 24px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            position: absolute;
-            top: 200px; /* Adjusted position to be further down */
-            left: 50%; /* Center align horizontally */
-            transform: translateX(-50%); /* Adjust for center alignment */
+            display: inline-block;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            margin-top: 20px;
         }
-        .claim-button:hover {
+        .claim-button:hover, .back-button:hover {
             background-color: #45a049;
         }
         .back-button {
-            padding: 10px 20px;
             background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
             position: absolute;
             top: 10px;
             right: 10px;
@@ -56,11 +59,15 @@
         .back-button:hover {
             background-color: #0056b3;
         }
+        .back-button::before {
+            content: '←'; /* Add left arrow */
+            margin-right: 6px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <button onclick="goBack()" class="back-button">Back</button>
+        <a href="#" class="back-button" onclick="goBack()">Back</a>
         <h1 class="heading">Plus</h1>
         <p class="subscription-info">Stop Thinking, Start Selling. Subscribe to the Plus Subscription to sell</p>
         <br>
