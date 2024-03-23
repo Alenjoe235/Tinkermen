@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - FarmConnect</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+        .about-heading {
+            margin-top: 0;
+            text-align: left; /* Align "About" heading to the left */
+        }
+        .farmconnect-heading {
+            text-align: center; /* Center align "FarmConnect" heading */
+        }
+        .text-right {
+            text-align: right;
+        }
+        .back-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="about-heading">About</h1>
+        <h2 class="farmconnect-heading">FarmConnect</h2> <!-- Center align "FarmConnect" heading -->
+        <p class="text-right">Developed by Aadith Tom, Alen Joe Benny, Deon Jose, and Johan Antony Davis</p>
+        <p>FarmConnect is a digital platform designed to foster a direct connection between local farmers and consumers, with a focus on reducing food waste, promoting sustainable agriculture practices, and supporting local communities. The platform serves as a marketplace where consumers can discover and purchase fresh, locally sourced produce directly from farmers, while farmers can efficiently sell their products and reduce waste by selling surplus or imperfect produce.</p>
+        <button onclick="goBack()" class="back-button">Back</button>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>
