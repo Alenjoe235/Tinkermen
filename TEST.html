@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FarmConnect</title>
+    <title>Combined Web Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,6 +38,12 @@
         .tab:last-child {
             margin-right: 0; /* Remove margin for the last tab */
         }
+        #nearestLocation {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -51,99 +57,76 @@
         </div>
     </div>
     <div class="tabs">
-        <button class="tab"><a href="map.html" style="text-decoration: none; color: inherit;">Maps</a></button>
+        <button class="tab"><a href="MainPageMap.html" style="text-decoration: none; color: inherit;">Maps</a></button>
         <button class="tab"><a href="MainPagePost.html" style="text-decoration: none; color: inherit;">Posts</a></button>
-        <button class="tab">Buy</button>
+        <button class="tab"><a href="MainPageBuy.html" style="text-decoration: none; color: inherit;">Buy</a></button>
         <button class="tab">Sell</button>
     </div>
-
-    <h1 style="text-align: center;">Buy Our Products</h1>
-
-    <div style="text-align: center;">
-        <input type="text" id="productName" placeholder="Search by product name">
-        <button onclick="searchProducts()">Search</button>
-    </div>
-
-    <div id="productList" style="margin-top: 20px;">
-        <!-- Product list will be displayed here -->
-    </div>
+    <h1>Nearest Location Finder</h1>
+    <p>Click the button below to get your current location and find the nearest predefined location:</p>
+    <button id="getLocationBtn">Get Location</button>
+    <div id="nearestLocation"></div>
 
     <script>
-        function searchProducts() {
-            var productName = document.getElementById("productName").value.toLowerCase();
-            var productList = document.getElementById("productList");
+        // Predefined locations (latitude, longitude)
+        var predefinedLocations = {
+            "farmer1": { "latitude":8.5485, "longitude": 76.9184 },
+            "farmer2": { "latitude": 8.4901, "longitude": 76.9535 },
+            "farmer3": { "latitude": 8.7333, "longitude": 76.7167 },
+            "farmer4": { "latitude": 8.593, "longitude": 77.0123},
+            "farmer5": { "latitude": 8.6952, "longitude":76.8113},
+            "farmer6": { "latitude": 8.4009, "longitude":76.9788 },
+            "farmer7": { "latitude": 8.4065, "longitude": 77.0932 },
+            
+            // Add more predefined locations as needed
+        };
 
-            // Fetch data from SheetDB
-            fetch('https://sheetdb.io/api/v1/g3u7hl1xrw1yi')
-            .then(response => response.json())
-            .then(data => {
-                var similarProducts = [];
-
-                // Compare entered text with product names
-                data.forEach(function(product) {
-                    var similarity = similarityScore(product.productname.toLowerCase(), productName);
-                    if (similarity > 0.5) { // Adjust threshold as needed
-                        similarProducts.push(product);
-                    }
-                });
-
-                productList.innerHTML = "";
-
-                similarProducts.forEach(function(product) {
-                    var productDiv = document.createElement("div");
-                    productDiv.innerHTML = `
-                        <h2>${product.productname}</h2>
-                        <p><strong>Price per kg/l:</strong> Rs ${product.priceperkg_l}</p>
-                        <p><strong>Farmer:</strong> ${product.name}</p>
-                        <p><strong>Description:</strong> ${product.description}</p>
-                    `;
-                    productList.appendChild(productDiv);
-                });
-            })
-            .catch(error => console.error('Error fetching data:', error));
+        // Function to calculate distance between two coordinates using Haversine formula
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            var R = 6371; // Radius of the Earth in kilometers
+            var dLat = (lat2 - lat1) * Math.PI / 180; // Convert degrees to radians
+            var dLon = (lon2 - lon1) * Math.PI / 180;
+            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            var distance = R * c; // Distance in kilometers
+            return distance;
         }
 
-        // Function to calculate similarity score between two strings
-        function similarityScore(str1, str2) {
-            const similarityThreshold = 0.7; // Adjust as needed
-            const longerLength = Math.max(str1.length, str2.length);
-            const editDistance = editDistanceScore(str1, str2);
-            const similarity = (longerLength - editDistance) / longerLength;
-            return similarity;
+        // Function to get user's current location
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showNearestLocation);
+            } else {
+                document.getElementById("nearestLocation").innerHTML = "Geolocation is not supported by this browser.";
+            }
         }
 
-        // Function to calculate edit distance between two strings
-        function editDistanceScore(str1, str2) {
-            str1 = str1.toLowerCase();
-            str2 = str2.toLowerCase();
-            let matrix = [];
+        // Function to find nearest predefined location
+        function showNearestLocation(position) {
+            var userLatitude = position.coords.latitude;
+            var userLongitude = position.coords.longitude;
 
-            // Initialize matrix with zeroes
-            for (let i = 0; i <= str1.length; i++) {
-                matrix[i] = [i];
-            }
+            var nearestLocationName = null;
+            var smallestDistance = Number.MAX_SAFE_INTEGER;
 
-            for (let j = 0; j <= str2.length; j++) {
-                matrix[0][j] = j;
-            }
-
-            // Calculate edit distance
-            for (let i = 1; i <= str1.length; i++) {
-                for (let j = 1; j <= str2.length; j++) {
-                    if (str1[i - 1] === str2[j - 1]) {
-                        matrix[i][j] = matrix[i - 1][j - 1];
-                    } else {
-                        matrix[i][j] = Math.min(
-                            matrix[i - 1][j - 1] + 1, // Substitution
-                            matrix[i][j - 1] + 1,     // Insertion
-                            matrix[i - 1][j] + 1      // Deletion
-                        );
+            for (var locationName in predefinedLocations) {
+                if (predefinedLocations.hasOwnProperty(locationName)) {
+                    var location = predefinedLocations[locationName];
+                    var distance = calculateDistance(userLatitude, userLongitude, location.latitude, location.longitude);
+                    if (distance < smallestDistance) {
+                        smallestDistance = distance;
+                        nearestLocationName = locationName;
                     }
                 }
             }
 
-            return matrix[str1.length][str2.length];
+            document.getElementById("nearestLocation").innerHTML = "Nearest location: " + nearestLocationName + ", Distance: " + smallestDistance.toFixed(2) + " kilometers";
         }
+
+        // Add event listener to the button
+        document.getElementById("getLocationBtn").addEventListener("click", getLocation);
     </script>
 </body>
 </html>
