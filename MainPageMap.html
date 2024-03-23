@@ -5,11 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Combined Web Page</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* Resetting default margin and padding */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box; /* Ensuring box-sizing is border-box for easier layout calculations */
         }
+
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Header styling */
         .header {
             background-color: #4CAF50;
             color: white;
@@ -18,26 +26,42 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .header h1 {
             margin: 0;
         }
+
+        /* Navigation tabs styling */
         .tabs {
             display: flex;
-            justify-content: center; /* Center align the tabs */
+            justify-content: center;
             background-color: #f2f2f2;
             padding: 10px;
         }
+
         .tab {
             padding: 5px 10px;
             border: none;
             cursor: pointer;
             background-color: #ddd;
             border-radius: 5px;
-            margin-right: 10px; /* Added margin between tabs */
+            margin-right: 10px;
         }
+
         .tab:last-child {
-            margin-right: 0; /* Remove margin for the last tab */
+            margin-right: 0;
+        }.image-container {
+            width: 25%; /* Adjust this value as needed */
+            /* You can also add other styles like margin, padding, etc. */
         }
+
+        .image-container img {
+            width: 100%; /* Ensure the image takes up 100% of the container's width */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Ensures no extra space below the image */
+        }
+
+        /* Nearest location container styling */
         #nearestLocation {
             margin-top: 20px;
             padding: 10px;
@@ -48,7 +72,7 @@
 </head>
 <body>
     <div class="header">
-        <h1><a href=" MainPage.html">FarmConnect</a></h1>
+        <a href=" MainPage.html"> <img src="logo.jpg" alt="Website Logo" width="200px"></a>
         <div>
             <button class="tab"><a href="about.html" style="text-decoration: none; color: inherit;">About</a></button>
             <button class="tab"><a href="cart.html" style="text-decoration: none; color: inherit;">Cart</a></button>
@@ -66,6 +90,9 @@
     <p>Click the button below to get your current location and find the nearest predefined location:</p>
     <button id="getLocationBtn">Get Location</button>
     <div id="nearestLocation"></div>
+    <div class="image-container">
+        <img src="farmer1.jpg" alt="Connecting through hearts"  margin="100px" >
+    </div>
 
     <script>
         // Predefined locations (latitude, longitude)
@@ -77,8 +104,6 @@
             "farmer5": { "latitude": 8.6952, "longitude":76.8113},
             "farmer6": { "latitude": 8.4009, "longitude":76.9788 },
             "farmer7": { "latitude": 8.4065, "longitude": 77.0932 },
-            
-            // Add more predefined locations as needed
         };
 
         // Function to calculate distance between two coordinates using Haversine formula
