@@ -1,22 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shopping Cart</title>
-  <link rel="stylesheet" href="cart.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .checkout-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+        }
+        .back-btn {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .total-price {
+            margin-top: 20px;
+            text-align: right;
+            color: #333;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-  <h1>Shopping Cart</h1>
-  <div id="product-inputs"></div>
-  <ul id="product-list"></ul>
-  <div id="buttons-container">
-    <button id="add-product">Add Product</button>
-    <button id="clear">Clear</button>
-    <button id="finish">Finish</button>
-  </div>
-  <div id="cart-items"></div>
+    <div class="container">
+        <h1>Cart</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items">
+                <!-- JavaScript will populate this section -->
+            </tbody>
+        </table>
+        <div class="total-price" id="total-price"></div>
+    </div>
+    <button class="checkout-btn" onclick="goToCheckout()">Checkout</button>
+    <button class="back-btn" onclick="goBack()">Back</button>
 
-  <script src="cart.js"></script>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        function goToCheckout() {
+            // Add your checkout logic here
+            console.log("Redirecting to checkout...");
+        }
+
+        function deleteItem(event) {
+            const row = event.target.parentElement.parentElement;
+            const productName = row.children[0].textContent;
+            const price = row.children[1].textContent.replace('₹', '');
+            row.remove(); // Remove row from table
+
+            // Delete item from database
+            fetch(`https://sheetdb.io/api/v1/oai5oe4wxwkji/productname/${productName}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(`Deleted item: ${productName}`);
+                updateTotalPrice(-parseFloat(price)); // Update total price
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function updateTotalPrice(priceChange) {
+            const totalPriceElement = document.getElementById('total-price');
+            let totalPrice = parseFloat(totalPriceElement.textContent.replace('Total Price = ₹', '')) + priceChange;
+            totalPriceElement.textContent = `Total Price = ₹${totalPrice.toFixed(2)}`;
+        }
+
+        fetch('https://sheetdb.io/api/v1/oai5oe4wxwkji')
+            .then(response => response.json())
+            .then(data => {
+                const cartItems = document.getElementById('cart-items');
+                let totalPrice = 0; // Initialize total price
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.productname}</td>
+                        <td>₹${item.price}</td>
+                        <td><button onclick="deleteItem(event)">-</button></td>
+                    `;
+                    cartItems.appendChild(row);
+                    totalPrice += parseFloat(item.price); // Accumulate prices
+                });
+                document.getElementById('total-price').textContent = `Total Price = ₹${totalPrice.toFixed(2)}`;
+            });
+    </script>
 </body>
 </html>
